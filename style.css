@@ -1,0 +1,16 @@
+body {
+    font-family: sans-serif;
+    background: #3f3f3f;
+    padding: 0;
+    margin: 0;
+}
+
+.drag-zone {
+    padding: 60px 20px;
+    border: 4px dashed rgb(248, 243, 243);
+    max-width: 500px;
+    color: rgb(245, 244, 244);
+    margin: auto;
+    margin-top: 30px;
+    text-align: center;
+}
