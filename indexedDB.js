@@ -17,44 +17,38 @@ IDBRequest.addEventListener("error",()=>{
     console.log("Error on IDBRequest.")
 });
 
-function getData(){
+function getData(mode,msg){
     const db = IDBRequest.result;
-    const IDBtransaction = db.transaction("names","readwrite");
+    const IDBtransaction = db.transaction("names",mode);
     const objectStore = IDBtransaction.objectStore("names");
-    return[objectStore,IDBtransaction];
+    IDBtransaction.addEventListener("complete",()=>{
+        console.log(msg)
+    });
+    return IDBtransaction;
 }
 
 function addObjet(entry){
-    const IDBData = getData();
+    const IDBData = getData("readwrite","Entry added correctly");
     IDBData[0].add(entry);
-    IDBData[1].addEventListener("complete",()=>{
-        console.log("Entry added correctly.")
-    })
 }
 
 function modifyObject(key,entry){
-    const IDBData = getData();
-    IDBData[0].put(entry,key);
-    IDBData[1].addEventListener("complete",()=>{
-        console.log("Entry modified correctly.")
-    })
+    const IDBData = getData("readwrite","Entry modified correctly");
+    IDBData.put(key,entry);
 }
 
 function deleteObject(key){
-    const IDBData = getData();
-    IDBData[0].delete(key);
-    IDBData[1].addEventListener("complete",()=>{
-        console.log("Entry deleted correctly.")
-    })
+    const IDBData = getData("readwrite","Entry deleted correctly");
+    IDBData.delete(key);
 }
 
 function readObject(entry){
-    const IDBData = getData();
-    const cursor = IDBData[0].openCursor();
+    const IDBData = getData("readonly");
+    const cursor = IDBData.openCursor();
     cursor.addEventListener("success",()=>{
         if (cursor.result){
             console.log(cursor.result.value);
             cursor.result.continue();
-        } else console.log("Every entre has been readed")
+        } else console.log("Every entry has been readed")
     });
 }
